@@ -299,6 +299,7 @@ export const useZ25Store = defineStore("z25Store", {
           } catch (e) {}
         },
         processTickerMsg(msg) {
+
           if (!("product_id" in msg)) {
             return;
           }
@@ -667,7 +668,6 @@ export const useZ25Store = defineStore("z25Store", {
               const data = JSON.parse(ev.data);
               if (data.type != "ticker") {
                 //window.wsio("in",data);
-                console.log(data.type);
                 if (data.type == "collective_block_update") {
                   this.processCollectiveBlockUpdate(data);
                 } else if (data.type == "block_update") {
