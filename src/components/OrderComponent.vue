@@ -176,7 +176,7 @@ export default defineComponent({
     },
     runCB() {
       console.log("runCB");
-      const url = `https://www.coinbase.com/advanced-trade/spot/${this.props.o.product_id}`;
+      const url = `https://www.coinbase.com/advanced-trade/spot/${this.props.o.product_id.replace('-USDC','-USD')}`;
       window.open(url, "_blank");
       /*
       if (this.running == true) {
@@ -194,9 +194,6 @@ export default defineComponent({
     render() {
       if(this.props.o.status=="FILLED")return;
       const id = `${this.props.o.product_id}-${this.props.o.order_id}`;
-      console.log("id", id);
-      console.log(this.props)
-      console.log(this.props.o)
       d3.select("#" + id)
         .selectAll("svg")
         .remove();

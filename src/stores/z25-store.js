@@ -306,9 +306,6 @@ export const useZ25Store = defineStore("z25Store", {
           if (pid in this.channels) {
             this.channels[pid].msgCount += 1;
             try {
-              console.log(msg)
-              console.log(msg.price)
-              console.log(this.channels[pid].rawData[0])
               this.channels[pid].rawData[0].tlast = new Date(Date.now());
               this.channels[pid].rawData[0].Close = parseFloat(msg.price);
               this.channels[pid].rawData[0].PricePctChange =

@@ -25,49 +25,49 @@
           </tr>
 
           <tr v-for="(o, i) of this.z25Store.orders" :key="i">
-            <td style="width: 80px"><q-btn flat dense @click="this.z25Store.cbxLink(o.product_id)">{{ o.product_id.split('-')[0] }}</q-btn></td>
+            <td style="width: 80px"><q-btn flat dense @click="this.z25Store.cbxLink(o.product_id.replace('-USDC','-USD'))">{{ o.product_id.split('-')[0] }}</q-btn></td>
             <td>
               <q-badge v-if="o.side == 'SELL'" color="red" rounded  />
               <q-badge v-if="o.side == 'BUY'" color="green" rounded  />
             </td>
             <td>
-              <span v-if="o.status=='OPEN' && o.side=='SELL'">
+              <span v-if="o.status=='OPEN'">
               {{ parseFloat(o.order_configuration.limit_limit_gtc.base_size) }}
               </span>
             </td>
             <td>
-              <span v-if="o.status=='OPEN' && o.side=='SELL'">
+              <span v-if="o.status=='OPEN'">
               {{ parseFloat(o.order_configuration.limit_limit_gtc.limit_price).toFixed(4) }}
               </span>
             </td>
             <td>
-              <span v-if="this.z25Store.channels[o.product_id]">
+              <span v-if="this.z25Store.channels[o.product_id.replace('-USDC','-USD')]">
               {{
-                this.z25Store.channels[o.product_id].rawData[0].Close.toFixed(4)
+                this.z25Store.channels[o.product_id.replace('-USDC','-USD')].rawData[0].Close.toFixed(4)
               }}
               </span>
             </td>
             <td>
-              <span v-if="this.z25Store.channels[o.product_id] && o.side=='SELL' && o.status=='OPEN'">
+              <span v-if="this.z25Store.channels[o.product_id.replace('-USDC','-USD')] && o.status=='OPEN'">
               {{
                 (
                   parseFloat(o.order_configuration.limit_limit_gtc.base_size) *
-                  this.z25Store.channels[o.product_id].rawData[0].Close
+                  this.z25Store.channels[o.product_id.replace('-USDC','-USD')].rawData[0].Close
                 ).toFixed(6)
               }}
               </span>
             </td>
             <td>
-              <span v-if="this.z25Store.channels[o.product_id] && o.side=='SELL' && o.status=='OPEN'">
+              <span v-if="this.z25Store.channels[o.product_id.replace('-USDC','-USD')] && o.status=='OPEN'">
               {{ (parseFloat(o.order_configuration.limit_limit_gtc.base_size) * parseFloat(o.order_configuration.limit_limit_gtc.limit_price)).toFixed(4) }}
               </span>
             </td>
             <td>
-              <span v-if="this.z25Store.channels[o.product_id] && o.side=='SELL' && o.status=='OPEN'">
+              <span v-if="this.z25Store.channels[o.product_id.replace('-USDC','-USD')] && o.status=='OPEN'">
               {{
                 (
                   ((o.order_configuration.limit_limit_gtc.limit_price -
-                    this.z25Store.channels[o.product_id].rawData[0].Close) /
+                    this.z25Store.channels[o.product_id.replace('-USDC','-USD')].rawData[0].Close) /
                     o.order_configuration.limit_limit_gtc.limit_price) *
                   100
                 ).toFixed(2)
