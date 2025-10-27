@@ -86,7 +86,7 @@
               class="absolute-top-right"
               icon="open_in_new"
               :style="{ color: 'grey' }"
-              @click="this.z25Store.togglePinned(o.product_id)"
+              @click="this.z25Store.togglePinned(o.product_id.replace('-USDC', '-USD'))"
             >
             </q-btn>
           </td>
@@ -193,7 +193,7 @@ export default defineComponent({
     },
     render() {
       if(this.props.o.status=="FILLED")return;
-      const id = `${this.props.o.product_id}-${this.props.o.order_id}`;
+      const id = `${this.props.o.product_id.replace('-USDC','-USD')}-${this.props.o.order_id}`;
       d3.select("#" + id)
         .selectAll("svg")
         .remove();
