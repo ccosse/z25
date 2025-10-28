@@ -46,6 +46,7 @@ const colorThemes = {
   
 export const useZ25Store = defineStore("z25Store", {
     state: () => ({
+        accounts: ref({}),
         channels: ref({}),
         currencies: ref({}),
         msgTypes: ref({}),
@@ -490,17 +491,25 @@ export const useZ25Store = defineStore("z25Store", {
             return "red";
           }
         },
-        updateAccounts(data) {
+        updateAccounts(accts){
+          //this.state.accounts=accts;
+          for(const acct of accts){
+            console.log(acct)
+            this.currencies[acct['currency']]["available"]=parseFloat(acct['available_balance']['value']);
+            this.currencies[acct['currency']]["balance"]=parseFloat(acct['available_balance']['value']);
+          }
+        },
+        updateAccountsOFF(data) {
           console.log(data);
           //update or set a balance field on each currency
           
           Object.entries(data).forEach((k, v) => {
             try {
               this.currencies[k[0].replace("-USD", "")]["available"] = parseFloat(
-                k[1]["balance"]["amount"]
+                k[1]["available_balance"]["value"]
               );
               this.currencies[k[0].replace("-USD", "")]["balance"] = 
-                parseFloat(k[1]["balance"]["amount"]);
+                parseFloat(k[1]["available_balance"]["value"]);
               //this.currencies[k[0].replace("-USD", "")]["hold"] = parseFloat(
               //  k[1].hold["value"]
               //);
@@ -615,10 +624,10 @@ export const useZ25Store = defineStore("z25Store", {
           this.ws.send(pyld);
           console.log("settings sent", pyld);
         },
-        getCBX() {
+        getAccounts() {
           const pyld = JSON.stringify({
-            type: "cmd",
-            cmd: "self.getCBX()",
+            type: "refresh_accounts",
+            value: "refresh_accounts",
           });
           this.ws.send(pyld);
         },

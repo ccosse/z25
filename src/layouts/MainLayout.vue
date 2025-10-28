@@ -119,8 +119,8 @@
             </span>
           </div>
         </q-expansion-item>
-<!--
         <AccountsComponent />
+<!--
         <CBXComponent />
 -->
     <DialsComponent />
@@ -229,9 +229,9 @@ import Z25Component from "components/Z25Component.vue";
 import NtupleComponent from "components/NtupleComponent.vue";
 import ChannelComponent from "components/ChannelComponent.vue";
 import DialsComponent from "components/DialsComponent.vue";
+import AccountsComponent from "components/AccountsComponent.vue";
 /*
 import CBXComponent from "components/CBXComponent.vue";
-import AccountsComponent from "components/AccountsComponent.vue";
 */
 import { useZ25Store } from "stores/z25-store.js";
 export default defineComponent({
@@ -241,9 +241,9 @@ export default defineComponent({
     NtupleComponent,
     ChannelComponent,
     DialsComponent,
+    AccountsComponent,
 /*
     CBXComponent,
-    AccountsComponent,
 */
     },
   setup() {

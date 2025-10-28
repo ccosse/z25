@@ -164,7 +164,7 @@
         <q-tooltip>Update Orders info</q-tooltip>
       </q-btn>
 
-			<q-btn dense @click="this.z25Store.getCBX()" icon="replay">
+			<q-btn dense @click="this.z25Store.getAccounts()" icon="replay">
         <q-tooltip>Update Account Balances</q-tooltip>
       </q-btn>
 

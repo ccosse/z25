@@ -6,7 +6,7 @@
     class="q-ma-xs q-pa-xs ptr"
   >
         <div class="flex flex-center" style="background-color: #222">
-          <div v-for="(o, i) of this.z25Store.orders" :key="i">
+          <div v-for="(o, i) in sortedOrders" :key="i">
             <OrderComponent :o="o" />
           </div>
         </div>
@@ -24,7 +24,7 @@
             <th>Progress</th>
           </tr>
 
-          <tr v-for="(o, i) of this.z25Store.orders" :key="i">
+          <tr v-for="(o, i) in sortedOrders" :key="i">
             <td style="width: 80px"><q-btn flat dense @click="this.z25Store.cbxLink(o.product_id.replace('-USDC','-USD'))">{{ o.product_id.split('-')[0] }}</q-btn></td>
             <td>
               <q-badge v-if="o.side == 'SELL'" color="red" rounded  />
@@ -80,19 +80,34 @@
   </q-card>
 </template>
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import { useZ25Store } from "stores/z25-store.js";
 import OrderComponent from "components/OrderComponent.vue";
 
+
 export default defineComponent({
-  name: "OrdersComponent",
+name: "OrdersComponent",
   components: {
     OrderComponent,
   },
   setup() {
-    return {
-      z25Store: useZ25Store(),
+    const z25Store = useZ25Store();
+
+const rankSide = (s) => {
+  const v = String(s ?? '').trim().toLowerCase()
+  if (v === 'buy' || v === 'b') return 0
+  if (v === 'sell' || v === 's') return 1
+  return 2
+}
+const sortedOrders = computed(() => {
+  const orders = Array.isArray(z25Store.orders) ? z25Store.orders : []
+  return [...orders].sort((a, b) => rankSide(a.side) - rankSide(b.side))
+})
+return {
+      z25Store,
       title: ref("Title"),
+    
+      sortedOrders
     };
   },
   mounted() {
