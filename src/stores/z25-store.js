@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import * as d3 from "d3";
 import axios from "axios";
+import { mdiAccountSearch } from "@quasar/extras/mdi-v7";
 
 const CURRENCIES_URL = "https://api.exchange.coinbase.com/currencies";
 
@@ -491,12 +492,26 @@ export const useZ25Store = defineStore("z25Store", {
             return "red";
           }
         },
+        report(){
+          console.log('z25-store.report')
+          var pyld = JSON.stringify({
+            type: "report"
+          });
+          this.ws.send(pyld);
+        },
+        getAllChannels(){
+          console.log('z25-store.getAllChannels')
+          var pyld = JSON.stringify({
+            type: "get_all_channels"
+          });
+          this.ws.send(pyld);
+        },
         updateAccounts(accts){
           //this.state.accounts=accts;
           for(const acct of accts){
             console.log(acct)
-            this.currencies[acct['currency']]["available"]=parseFloat(acct['available_balance']['value']);
-            this.currencies[acct['currency']]["balance"]=parseFloat(acct['available_balance']['value']);
+            this.currencies[acct['currency']]["available"]=parseFloat(acct['available_balance']['value'])+parseFloat(acct['hold']['value']);
+            this.currencies[acct['currency']]["balance"]=parseFloat(acct['available_balance']['value'])+parseFloat(acct['hold']['value']);
           }
         },
         updateAccountsOFF(data) {
@@ -612,7 +627,7 @@ export const useZ25Store = defineStore("z25Store", {
         },
         sendSettings() {
           const pyld = JSON.stringify({
-            type: "z25d",
+            type: "send_settings",
             volThresh: this.volThresh,
             pctThresh: this.pctThresh,
             subscribeBTC: this.subscribeBTC,
@@ -801,9 +816,11 @@ export const useZ25Store = defineStore("z25Store", {
         },
         clearLookAtMe() {
           for (const [k, v] of Object.entries(this.channels)) {
-            if (this.checkOkayDeleteChannel(k) == true) {
-              delete this.channels[k];
-            }
+            v.lookAtMePCT=false;
+            v.lookAtMeVOL=false;
+            //if (this.checkOkayDeleteChannel(k) == true) {
+            //    delete this.channels[k];
+            //}
           }
           var pyld = JSON.stringify({
             type: "clearLookAtMe",

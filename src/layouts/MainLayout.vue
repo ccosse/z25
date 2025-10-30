@@ -19,7 +19,7 @@
           flat
           round
           icon="auto_awesome"
-          @click="this.z25Store.updateAccounts()"
+          @click="this.z25Store.report()"
         >
         </q-btn>
         <q-btn flat round icon="menu" @click="toggleRightDrawer" />

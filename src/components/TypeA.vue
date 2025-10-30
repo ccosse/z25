@@ -174,6 +174,9 @@
       <q-btn dense @click="this.toggleAll()" icon="cancel">
         <q-tooltip>TypeA plot will bypass checks and plot all channels, and NOT change any settings</q-tooltip>
       </q-btn><!--bypass-->
+      <q-btn dense @click="this.getAllChannels()" icon="replay">
+        <q-tooltip>Request one collective block_update of all channels at z25</q-tooltip>
+      </q-btn><!--bypass-->
       <q-space />
       <q-btn dense @click="this.z25Store.cancelAll()" icon="cancel">
         <q-tooltip>Cancel all orders</q-tooltip>
@@ -210,10 +213,13 @@ export default defineComponent({
   methods: {
     toggleAll(){
       if (this.z25Store.plotAllChannelsOverride === true) {
-        this.z25Store.plotAllChannelsOverride = false
+        this.z25Store.plotAllChannelsOverride = false;
       } else {
-        this.z25Store.plotAllChannelsOverride = true
+        this.z25Store.plotAllChannelsOverride = true;
       }
+    },
+    getAllChannels(){
+      this.z25Store.getAllChannels();
     },
     toggleOrders() {
       if (d3.select("#ordersPanel").classed("hidden") == true)
