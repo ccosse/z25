@@ -134,8 +134,7 @@
       <q-scroll-area :style="{ height: '94vh' }" ref="scrollAreaRHS">
 
         <q-expansion-item label="Pinned" v-model="pinnedListExpanded">
-          <div id="channelPanel" class="flex flex-center">
-
+          <div v-if="pinnedListExpanded" id="channelPanel" class="flex flex-center">
             <span
               v-for="(c, k) of Object.entries(this.z25Store.channels).filter(
                 (d) => d[1].pid == 'BTC-USD'
@@ -155,6 +154,7 @@
             </span>
           </div>
         </q-expansion-item>
+
 
         <q-expansion-item label="Orders" v-model="ordersListExpanded">
           <template v-slot:header>
@@ -198,7 +198,7 @@
 
 
         <q-expansion-item label="Ignore">
-          <div id="ignoreDiv" class="flex flex-center">
+          <div v-if="open" id="ignoreDiv" class="flex flex-center">
             <span
               v-for="(c, k) of Object.entries(this.z25Store.channels).filter(
                 (d) => d[1].ignore == true
@@ -211,7 +211,9 @@
         </q-expansion-item>
 
         <q-expansion-item label="debug">
-          {{ this.z25Store.channelsWithOrders }}
+          <div v-if="open">
+            {{ this.z25Store.channelsWithOrders }}
+          </div>
         </q-expansion-item>
         <q-page-sticky position="bottom-right" :offset="[-285,0]">
         <q-btn fab icon="height" color="grey" @click=this.scrollTopRHS() />

@@ -386,7 +386,7 @@ export const useZ25Store = defineStore("z25Store", {
           }
         },
         processBlockUpdate(msg) {
-          console.log("processBlockUpdate", msg);
+          //console.log("processBlockUpdate", msg);
           const pid = msg.product_id;
           const currname = msg.product_id.split("-")[0];
           this.currencies[currname].subscribed = msg.subscribed;

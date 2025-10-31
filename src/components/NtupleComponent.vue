@@ -1,6 +1,6 @@
 <template>
   <q-expansion-item label="Ntuple" v-model="expanded">
-  <q-card flat class="full-width" v-if="this.expanded">
+  <q-card flat class="full-width" v-if="expanded">
     <q-card-section>
       <table dense id='ntupleTable' width="100%" class="text-center"><tbody>
       <tr class="font-weight-bold">

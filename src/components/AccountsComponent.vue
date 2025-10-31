@@ -1,7 +1,7 @@
 <template>
 
 <q-expansion-item label="Portfolio" v-model="expanded">
-	<div v-if="this.expanded" id="accountsPanel" class="full-width">
+	<div v-if="expanded" id="accountsPanel" class="full-width">
 
 	<q-card flat>
 		<q-card-section>
