@@ -300,11 +300,49 @@ export const useZ25Store = defineStore("z25Store", {
             );
           } catch (e) {}
         },
+        processPriceUpdate(msg){
+          //console.log("processBlockUpdate", msg);
+          const pid = msg.product_id;
+          const currname = msg.product_id.split("-")[0];
+          this.currencies[currname].subscribed = msg.subscribed;
+          if (pid in this.channels) {
+            this.channels[pid].balance = msg.balance;
+            this.channels[pid].subscribed = msg.subscribed;
+            this.channels[pid].lookAtMeVOL = msg.lookAtMeVOL;
+            this.channels[pid].lookAtMePCT = msg.lookAtMePCT;
+          } else {
+            this.channels[pid] = {
+              msgCount: 0,
+              rawData: [],
+              color: this.getChannelColor(pid), //NEED: eliminate this w/getter
+              balance: msg.balance,
+              fatLine: false,
+              subscribed: msg.subscribed,
+              lookAtMeVOL: msg.lookAtMeVOL,
+              lookAtMePCT: msg.lookAtMePCT,
+              pid: pid,
+              candlesticks: false,
+              dots: false,
+              bars: false,
+              hidden: true,
+              ignore: false,
+              subscribed: false,
+              pinned: false,
+              high_24h: msg.high_24h,
+              low_24h: msg.low_24h,
+              open_24h: msg.open_24h,
+              volume_1m: msg.volume_1m,
+              price: msg.price,
+            };
+          }
+          this.updatePriceLabels(msg);
+        },
         processTickerMsg(msg) {
 
           if (!("product_id" in msg)) {
             return;
           }
+          console.log("processTickerMsg: "+msg["product_id"])
           const pid = msg.product_id;
           if (pid in this.channels) {
             this.channels[pid].msgCount += 1;
@@ -425,7 +463,7 @@ export const useZ25Store = defineStore("z25Store", {
           this.updatePriceLabels(msg);
         },
         processCollectiveBlockUpdate(MSG) {
-          console.log("processCollectiveBlockUpdate", MSG);
+          //console.log("processCollectiveBlockUpdate", MSG);
           Object.keys(MSG).forEach((k, kidx) => {
             if (k !== "type") {
               const msg = MSG[k];
@@ -508,8 +546,9 @@ export const useZ25Store = defineStore("z25Store", {
         },
         updateAccounts(accts){
           //this.state.accounts=accts;
+          console.log("updateAccounts: " + accts);
           for(const acct of accts){
-            console.log(acct)
+            console.log(acct);
             this.currencies[acct['currency']]["available"]=parseFloat(acct['available_balance']['value'])+parseFloat(acct['hold']['value']);
             this.currencies[acct['currency']]["balance"]=parseFloat(acct['available_balance']['value'])+parseFloat(acct['hold']['value']);
           }
@@ -692,10 +731,12 @@ export const useZ25Store = defineStore("z25Store", {
               const data = JSON.parse(ev.data);
               if (data.type != "ticker") {
                 //window.wsio("in",data);
-                if (data.type == "collective_block_update") {
-                  this.processCollectiveBlockUpdate(data);
+                if (data.type == "price_update") {
+                  this.processPriceUpdate(data);
                 } else if (data.type == "block_update") {
                   this.processBlockUpdate(data);
+                } else if (data.type == "collective_block_update") {
+                  this.processCollectiveBlockUpdate(data);
                 } else if (data.type == "refresh_accounts") {
                   this.updateAccounts(data.value);
                 } else if (data.type == "refresh_orders") {
