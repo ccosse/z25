@@ -923,5 +923,9 @@ export const useZ25Store = defineStore("z25Store", {
           };
           this.wsio("out", pyld);
         },
+        tidalTraderLookAt(pid){
+          console.log("tidalTraderLookAt");
+          this.wsio("out", {type: "tidalTrader", value: pid, id: ""});
+        },
       },
     });

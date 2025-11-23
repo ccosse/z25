@@ -558,9 +558,10 @@ export default defineComponent({
       else this.z25Store.channels[k].hidden = true;
     },
     toggleIgnore(k) {
-      if (this.z25Store.channels[k].ignore)
-        this.z25Store.channels[k].ignore = false;
-      else this.z25Store.channels[k].ignore = true;
+      //if (this.z25Store.channels[k].ignore)
+      //  this.z25Store.channels[k].ignore = false;
+      //else this.z25Store.channels[k].ignore = true;
+      this.z25Store.tidalTraderLookAt(k);
     },
     toggleDots(k) {
       if (this.z25Store.channels[k].dots)
